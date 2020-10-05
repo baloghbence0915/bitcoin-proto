@@ -9,7 +9,7 @@ exports.generateKeyPair = function () {
         if (secp256k1.privateKeyVerify(privateKey)) break;
     }
 
-    const publicKey = Buffer.from(secp256k1.publicKeyCreate(privateKey, true));
+    const publicKey = secp256k1.publicKeyCreate(privateKey, true);
 
     return {
         privateKey,
@@ -18,11 +18,11 @@ exports.generateKeyPair = function () {
 }
 
 exports.sign = function (privateKey, msg) {
-    return Buffer.from(secp256k1.ecdsaSign(msg, privateKey).signature);
+    return secp256k1.ecdsaSign(Uint8Array.from(exports.hash(msg)), privateKey).signature;
 };
 
 exports.verify = function (publicKey, signature, msg) {
-    return secp256k1.ecdsaVerify(signature, msg, publicKey);
+    return secp256k1.ecdsaVerify(signature, Uint8Array.from(exports.hash(msg)),publicKey);
 }
 
 exports.hash = function (obj) {

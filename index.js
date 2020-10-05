@@ -23,8 +23,9 @@ const {
   startServer
 } = require('./server');
 
+const { privateKey, publicKey } = generateKeyPair();
 
-// const transactionHash = hash({asd:'asd'});
+// const transactionHash = hash(JSON.stringify({asd:'asd'}));
 // console.log({ transactionHash });
 
 // // Send signature to nodes
@@ -36,26 +37,18 @@ const {
 // console.log({ verification });
 
 
-const { privateKey, publicKey } = generateKeyPair();
-
-let ledger;
-let blockChain;
 
 if (isRoot()) {
-  ledger = initializeLedger(publicKey);
-  blockChain = initializeBlockChain();
-  startServer(ledger, blockChain, port(), true);
-
-  console.log({ ledger, blockChain })
+  const { ledger, firstTransactionId } = initializeLedger(Buffer.from(publicKey).toString('hex'));
+  const blockChain = initializeBlockChain(firstTransactionId);
+  startServer(ledger, blockChain, port(), true, publicKey, privateKey);
 } else {
   Promise.all([
     loginToRoot(),
     getLedger(),
     getBlockchain()
   ]).then(([_, ledger, blockChain]) => {
-    startServer(ledger, blockChain, port(), false);
-
-    console.log({ ledger, blockChain })
+    startServer(ledger, blockChain, port(), false, publicKey, privateKey);
   });
 }
 

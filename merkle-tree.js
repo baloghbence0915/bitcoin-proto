@@ -16,7 +16,7 @@ class MerkleTree {
             const newHighestLevel = [];
             for (let i = 0; i < highestLevel.length; i += 2) {
                 if (highestLevel[i + 1]) {
-                    newHighestLevel.push(hash(highestLevel[i].toString('hex') + highestLevel[i + 1].toString('hex')));
+                    newHighestLevel.push(hash(highestLevel[i] + highestLevel[i + 1]));
                 } else {
                     // Fallback for odd leaves
                     newHighestLevel.push(highestLevel[i]);
@@ -25,182 +25,182 @@ class MerkleTree {
             levels.push(newHighestLevel);
         }
 
-        return levels[levels.length - 1][0];
+        return levels[levels.length - 1][0].toString('hex');
     }
 }
 
 function testMerkleTree() {
-    const arr = [Buffer.from([1, 255]), Buffer.from([255, 1]), Buffer.from([255, 255]), Buffer.from([1, 1]), Buffer.from([127, 127]), Buffer.from([0, 127]), Buffer.from([127, 0]), Buffer.from([127, 255])];
+    const arr = [Buffer.from([1, 255]).toString('hex'), Buffer.from([255, 1]).toString('hex'), Buffer.from([255, 255]).toString('hex'), Buffer.from([1, 1]).toString('hex'), Buffer.from([127, 127]).toString('hex'), Buffer.from([0, 127]).toString('hex'), Buffer.from([127, 0]).toString('hex'), Buffer.from([127, 255]).toString('hex')];
 
     console.log('First:');
-    console.log(arr[0].toString("hex"), '\n',
+    console.log(arr[0], '\n',
         'Manually created root hash:\t\t',
-        arr[0].toString('hex')
+        arr[0]
     );
-    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0]]).getRootHash().toString('hex'));
+    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0]]).getRootHash());
 
     console.log('Second:');
-    console.log(arr[0].toString("hex"), arr[1].toString("hex"), '\n',
+    console.log(arr[0], arr[1], '\n',
         'Manually created root hash:\t\t',
         hash(
-            arr[0].toString('hex')
+            arr[0]
             +
-            arr[1].toString('hex')
+            arr[1]
         ).toString('hex')
     );
-    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1]]).getRootHash().toString('hex'));
+    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1]]).getRootHash());
 
     console.log('Third:');
-    console.log(arr[0].toString("hex"), arr[1].toString("hex"), arr[2].toString("hex"), '\n',
+    console.log(arr[0], arr[1], arr[2], '\n',
         'Manually created root hash:\t\t',
         hash(
             hash(
-                arr[0].toString('hex')
+                arr[0]
                 +
-                arr[1].toString('hex')
-            ).toString('hex')
+                arr[1]
+            )
             +
-            arr[2].toString('hex')
+            arr[2]
         ).toString('hex')
 
     );
-    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2]]).getRootHash().toString('hex'));
+    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2]]).getRootHash());
 
     console.log('Fourth:');
-    console.log(arr[0].toString("hex"), arr[1].toString("hex"), arr[2].toString("hex"), arr[3].toString("hex"), '\n',
+    console.log(arr[0], arr[1], arr[2], arr[3], '\n',
         'Manually created root hash:\t\t',
         hash(
             hash(
-                arr[0].toString('hex')
+                arr[0]
                 +
-                arr[1].toString('hex')
-            ).toString('hex')
+                arr[1]
+            )
             +
             hash(
-                arr[2].toString('hex')
+                arr[2]
                 +
-                arr[3].toString('hex')
-            ).toString('hex')
+                arr[3]
+            )
         ).toString('hex')
 
     );
-    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2], arr[3]]).getRootHash().toString('hex'));
+    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2], arr[3]]).getRootHash());
 
     console.log('Fifth:');
-    console.log(arr[0].toString("hex"), arr[1].toString("hex"), arr[2].toString("hex"), arr[3].toString("hex"), arr[4].toString("hex"), '\n',
+    console.log(arr[0], arr[1], arr[2], arr[3], arr[4], '\n',
         'Manually created root hash:\t\t',
         hash(
             hash(
                 hash(
-                    arr[0].toString('hex')
+                    arr[0]
                     +
-                    arr[1].toString('hex')
-                ).toString('hex')
+                    arr[1]
+                )
                 +
                 hash(
-                    arr[2].toString('hex')
+                    arr[2]
                     +
-                    arr[3].toString('hex')
-                ).toString('hex')
-            ).toString('hex')
+                    arr[3]
+                )
+            )
             +
-            arr[4].toString('hex')
+            arr[4]
         ).toString('hex')
     );
-    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2], arr[3], arr[4]]).getRootHash().toString('hex'));
+    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2], arr[3], arr[4]]).getRootHash());
 
     console.log('Sixth:');
-    console.log(arr[0].toString("hex"), arr[1].toString("hex"), arr[2].toString("hex"), arr[3].toString("hex"), arr[4].toString("hex"), arr[5].toString("hex"), '\n',
+    console.log(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], '\n',
         'Manually created root hash:\t\t',
         hash(
             hash(
                 hash(
-                    arr[0].toString('hex')
+                    arr[0]
                     +
-                    arr[1].toString('hex')
-                ).toString('hex')
+                    arr[1]
+                )
                 +
                 hash(
-                    arr[2].toString('hex')
+                    arr[2]
                     +
-                    arr[3].toString('hex')
-                ).toString('hex')
-            ).toString('hex')
+                    arr[3]
+                )
+            )
             +
             hash(
-                arr[4].toString('hex')
+                arr[4]
                 +
-                arr[5].toString('hex')
-            ).toString('hex')
+                arr[5]
+            )
         ).toString('hex')
     );
-    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]]).getRootHash().toString('hex'));
+    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2], arr[3], arr[4], arr[5]]).getRootHash());
 
     console.log('Seventh:');
-    console.log(arr[0].toString("hex"), arr[1].toString("hex"), arr[2].toString("hex"), arr[3].toString("hex"), arr[4].toString("hex"), arr[5].toString("hex"), arr[6].toString("hex"), '\n',
+    console.log(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], '\n',
         'Manually created root hash:\t\t',
         hash(
             hash(
                 hash(
-                    arr[0].toString('hex')
+                    arr[0]
                     +
-                    arr[1].toString('hex')
-                ).toString('hex')
+                    arr[1]
+                )
                 +
                 hash(
-                    arr[2].toString('hex')
+                    arr[2]
                     +
-                    arr[3].toString('hex')
-                ).toString('hex')
-            ).toString('hex')
+                    arr[3]
+                )
+            )
             +
             hash(
                 hash(
-                    arr[4].toString('hex')
+                    arr[4]
                     +
-                    arr[5].toString('hex')    
-                ).toString('hex')
+                    arr[5]    
+                )
                 +
-                arr[6].toString('hex')
-            ).toString('hex')
+                arr[6]
+            )
         ).toString('hex')
     );
-    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6]]).getRootHash().toString('hex'));
+    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6]]).getRootHash());
 
     console.log('Eighth:');
-    console.log(arr[0].toString("hex"), arr[1].toString("hex"), arr[2].toString("hex"), arr[3].toString("hex"), arr[4].toString("hex"), arr[5].toString("hex"), arr[6].toString("hex"), arr[7].toString("hex"), '\n',
+    console.log(arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7], '\n',
         'Manually created root hash:\t\t',
         hash(
             hash(
                 hash(
-                    arr[0].toString('hex')
+                    arr[0]
                     +
-                    arr[1].toString('hex')
-                ).toString('hex')
+                    arr[1]
+                )
                 +
                 hash(
-                    arr[2].toString('hex')
+                    arr[2]
                     +
-                    arr[3].toString('hex')
-                ).toString('hex')
-            ).toString('hex')
+                    arr[3]
+                )
+            )
             +
             hash(
                 hash(
-                    arr[4].toString('hex')
+                    arr[4]
                     +
-                    arr[5].toString('hex')
-                ).toString('hex')
+                    arr[5]
+                )
                 +
                 hash(
-                    arr[6].toString('hex')
+                    arr[6]
                     +
-                    arr[7].toString('hex')
-                ).toString('hex')
-            ).toString('hex')
+                    arr[7]
+                )
+            )
         ).toString('hex')
     );
-    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7]]).getRootHash().toString('hex'));
+    console.log('Pragmatically created root hash:\t', new MerkleTree([arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6], arr[7]]).getRootHash());
 }
 
 // testMerkleTree();
